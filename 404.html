@@ -1,2 +1,9 @@
 <!DOCTYPE html><title>Pagist : Redirecting...</title><meta charset=utf-8>
-<p>(Work in progress)
+<script>
+var loc = location.pathname
+if (loc.match(/^\/\w+$/)) {
+  loc.replace(location.pathname.replace(/^\//, '/?'))
+} else {
+  document.write('<p>Invalid URL')
+}
+</script>
