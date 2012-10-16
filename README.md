@@ -5,7 +5,7 @@ Pagist: Turn a Gist into a nice looking web page
 
 Pagist is a small web app that turns a Gist into a nice-looking web page.
 
-[MathJax](http://mathjax.com/) is included so you can write beautiful math. [__See an example!__](http://pagist.github.com/?3899155)
+[MathJax](http://mathjax.com/) is included so you can write beautiful math. [__See an example__](http://pagist.github.com/?3899155), or a [__kitchen sink__](http://pagist.github.com/?3899782).
 
 Contributions welcomed!
 
@@ -37,14 +37,7 @@ Supports Markdown. You can write HTML (including scripts and styles) there too.
 To Do
 -----
 
-* Support Custom CSS and Custom Layout (maybe ejs)
-
-
-
-
-
-
-
+* Support custom layout.
 
 
 
