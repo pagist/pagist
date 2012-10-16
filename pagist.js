@@ -57,7 +57,7 @@ Pagist.filetypes['.js'] = function(text) {
       if (suffix && Pagist.filetypes[suffix[0]]) {
         html += Pagist.filetypes[suffix[0]].call(file, file.content)
       } else {
-        html += '<p>Unknown file: ' + html + '</p>'
+        html += '<p>Unknown file: ' + file.filename + '</p>'
       }
     }
     if (Pagist.layout == null) Pagist.layout = Pagist.DEFAULT_LAYOUT
