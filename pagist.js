@@ -4,14 +4,26 @@ Pagist.DEFAULT_LAYOUT = function(html) {
     + '<script src="http://code.jquery.com/jquery.min.js"><\/script>'
     + '<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"><\/script>'
     + '<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>'
-    + '<style>div.container { max-width: 720px } .footer { text-align: center; color: #999; margin: 64px 0 16px } .footer a { color: #888 }</style>'
+    + '<style>div.container { max-width: 720px; margin-top: 16px } .footer { text-align: center; color: #999; margin: 64px 0 16px } .footer a { color: #888 }</style>'
     + '<div class="container">'
     +   html
     + '</div>'
-    + '<div class="footer">gist <a href="' + this.data.html_url + '">#' + this.data.id + '</a>'
+    + '<div class="footer"><b>gist <a href="' + this.data.html_url + '">#' + this.data.id + '</a></b>'
     +   ' by <a href="https://github.com/' + this.data.user.login + '">' + this.data.user.login + '</a>'
     +   ' <a href="' + this.data.html_url + '#comments">&raquo; comments</a>'
     + '</div>'
+}
+
+Pagist.filetypes['.html'] = function(text) {
+  return text
+}
+
+Pagist.filetypes['.css'] = function(text) {
+  return '<style>' + text + '</style>'
+}
+
+Pagist.filetypes['.js'] = function(text) {
+  return '<script>' + text + '</script>'
 }
 
 ;(function() {
