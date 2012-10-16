@@ -2,7 +2,7 @@
 <script>
 var loc = location.pathname
 if (loc.match(/^\/\w+$/)) {
-  loc.replace(location.pathname.replace(/^\//, '/?'))
+  location.replace(location.pathname.replace(/^\//, '/?'))
 } else {
   document.write('<p>Invalid URL')
 }
