@@ -9,6 +9,8 @@ Pagist is a small web app that turns a Gist into a nice-looking web page.
 
 Contributions welcomed!
 
+<img src="http://i.imgur.com/1xKwJ.png" alt="screenshot"/>
+
 
 How To Use
 ----------
