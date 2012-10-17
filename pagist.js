@@ -1,4 +1,32 @@
 
+Pagist.MathExtractor = function() {
+  var map = {}
+    , nextID = 1
+  function id(text) {
+    for (;;) {
+      var id = '$Math-' + nextID++ + '$'
+      if (text.indexOf(id) == -1) return id
+    }
+  }
+  return {
+    extract: function(text) {
+      return text.replace(/\\\([\s\S]+?\\\)|\$\$[\s\S]+?\$\$/g, function(a) {
+        var r = id(text)
+        map[r] = a
+        return r
+      })
+    }
+  , insert: function(text) {
+      for (var i in map) {
+        if (Object.prototype.hasOwnProperty.call(map, i)) {
+          text = text.split(i).join(map[i])
+        }
+      }
+      return text
+    }
+  }
+}
+
 Pagist.DEFAULT_LAYOUT = function(html) {
   return '<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">'
     + '<script src="http://code.jquery.com/jquery.min.js"><\/script>'
@@ -28,7 +56,8 @@ Pagist.filetypes['.js'] = function(text) {
 
 ;(function() {
 
-  var id = location.search.match(/^\?(\w+)/)
+  var id = location.search.match(/^\?([^\/]+\/\w*|\w+)/)
+    , endpoint
 
   if (!id) {
     location.href = 'https://github.com/pagist/pagist.github.com/'
@@ -36,6 +65,12 @@ Pagist.filetypes['.js'] = function(text) {
   }
 
   id = id[1]
+
+  if (id.indexOf('/') == -1) {
+    endpoint = 'https://api.github.com/gists/' + id
+  } else {
+    endpoint = 'http://' + id
+  }
 
   window.handleGistData = function(res) {
     document.title = res.data.description
@@ -65,7 +100,7 @@ Pagist.filetypes['.js'] = function(text) {
   }
 
   document.write(
-    '<script src="https://api.github.com/gists/' + id
+    '<script src="' + endpoint
   + '?callback=handleGistData&nocache=' + new Date().getTime() + '"><\/script>'
   )
 
