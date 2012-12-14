@@ -1,0 +1,50 @@
+<!DOCTYPE html><title>Pagist for Etherpad</title><meta charset=utf-8>
+<style>body { margin: 0; padding: 0; }
+html, body { overflow: hidden; }
+html, body, iframe { width: 100%; height: 100%; }
+#b { position: fixed; top: 4px; left: 4px; }</style>
+<script src="pagist-init.js"></script>
+<script src="pagist-md.js"></script>
+<script src="pagist.js"></script>
+<iframe id="display" style="margin:0;padding:0;border:0"></iframe>
+<div id="b">
+  <button onclick="updatepad()">Refresh</button>
+</div>
+<script>
+
+function show(data) {
+  var cw = document.getElementById('display').contentWindow
+    , cwd = cw.document
+  cwd.open()
+  cwd.write(Pagist.render([ { filename: 'main.md', content: data } ]))
+  cwd.close()
+}
+
+function showpad(resp) {
+  if (resp && resp.code == 0 && resp.data && resp.data.text) {
+    show(resp.data.text)
+  } else {
+    show('Error loading pad!')
+  }
+}
+
+function pad(provider, id) {
+  function update() {
+    var sc = document.createElement('script')
+    sc.async = true
+    sc.src = 'https://padjson.rs.af.cm/' + provider + '/' + id + '.json?callback=showpad&now=' + new Date().getTime()
+    sc.type = 'text/javascript'
+    document.body.appendChild(sc)
+  }
+  setTimeout(update, 1)
+  window.updatepad = update
+}
+
+var m
+if ((m = location.search.match(/^\??(\w+)\/(\w+)$/))) {
+  pad(m[1], m[2])
+} else {
+  show('Usage: pad.html?primarypad/ID\n\nThis can be useful when writing draft or before posting to Gist.')
+}
+
+</script>
