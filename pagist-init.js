@@ -1,4 +1,0 @@
-
-Pagist = {
-  filetypes: {}
-}

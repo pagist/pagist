@@ -1,0 +1,23 @@
+{
+  "name": "pagist",
+  "version": "0.0.0",
+  "description": "Pagist - beautiful math documents online, using Gist",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pagist/pagist.github.com.git"
+  },
+  "author": "Thai Pangsakulyanont <org.yi.dttvb@gmail.com>",
+  "license": "MIT",
+  "gitHead": "7fc35c5ea5b079d9271ffaf1509b2713c6a87c97",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "express": "~3.4.0",
+    "request": "~2.27.0",
+    "lodash": "~2.2.0",
+    "when": "~2.4.0"
+  }
+}

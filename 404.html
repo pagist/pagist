@@ -1,9 +1,4 @@
 <!DOCTYPE html><title>Pagist : Redirecting...</title><meta charset=utf-8>
 <script>
-var loc = location.pathname
-if (loc.match(/^\/\w+$/)) {
-  location.replace(location.pathname.replace(/^\//, '/?'))
-} else {
-  document.write('<p>Invalid URL')
-}
+location.host = 'pagist.m3th.org'
 </script>
