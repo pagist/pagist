@@ -28,6 +28,10 @@ Pagist.server = {
   googledrive: function(params, callback) {
     var url = 'http://googledrive.com/host/' + params.path
     return makeRequest(url)
+  },
+  etherpadlite: function(params, callback) {
+    var url = params.base + '/p/' + params.name + '/export/txt'
+    return makeRequest(url)
   }
 }
 

@@ -118,6 +118,37 @@ Pagist.route = function(path) {
     }
   })
 
+  function etherpad(providerName, baseUrl) {
+    return function(m) {
+      var name = m[1]
+      var footer = _.template(
+            '<a href="<%- url %>"><b><%- name %></b></a> on <a href="http://board.net">board.net</a>'
+          )
+      return {
+        type:   'etherpadlite',
+        params: {
+          base: baseUrl,
+          name: m[1]
+        },
+        handle: function(data) {
+          return {
+            title:    name,
+            files:    [
+              { filename: 'content.md', content: data }
+            ],
+            footer:   footer({
+              name: name,
+              url:  baseUrl + '/p/' + name
+            })
+          }
+        }
+      }
+    }
+  }
+
+  on(/^board\.net\/(\w+)$/, etherpad('board.net', 'http://board.net'))
+  
+
   return result
 
 }
