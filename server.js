@@ -36,8 +36,9 @@ app.use(express.static(__dirname + '/static'))
 app.use(function(req, res, next) {
 
   var path = req.path.replace(/^\/?/, '')
-  var target = Pagist.route(path)
+  if (path === '') path = '4287148'
 
+  var target = Pagist.route(path)
   if (!target) return next()
 
   Pagist.server[target.type](target.params)
