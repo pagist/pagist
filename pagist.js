@@ -1,8 +1,6 @@
-/*jshint evil:true*/
-;(function() {
 
-var marked = typeof window != 'undefined' ? window.marked : require('./lib/marked')
-var _      = typeof window != 'undefined' ? window._      : require('lodash')
+var marked = require('marked')
+var _      = require('lodash')
 
 var Pagist = {
   filetypes: {}
@@ -57,6 +55,7 @@ Pagist.render = function(files, context) {
 Pagist.basename = function(path) {
   return path.replace(/^.*\//, '')
 }
+
 Pagist.beforeBasename = function(path) {
   return path.substr(0, path.length - Pagist.basename(path).length)
 }
@@ -123,22 +122,6 @@ Pagist.route = function(path) {
 
 }
 
-Pagist.jsonp = function(endpoint, callback) {
-  window.handleGistData = callback
-  document.write(
-    '<script src="' + endpoint
-  + '?callback=handleGistData&nocache=' + new Date().getTime() + '"><\/script>'
-  )
-}
-
-Pagist.browser = {
-  gist: function(params, callback) {
-    return Pagist.jsonp('https://api.github.com/gists/' + params.id, function(res) {
-      callback(res.data)
-    })
-  }
-}
-
 Pagist.generate = function(data) {
   var list = []
     , files = data.files
@@ -151,35 +134,6 @@ Pagist.generate = function(data) {
   }
   var context = { footer: data.footer }
   return Pagist.render(list, context)
-}
-
-Pagist.main = function() {
-
-  var path = location.search.replace(/^\?/, '')
-  var target = Pagist.route(path)
-
-  if (!target) target = Pagist.route('4287148')
-
-  Pagist.browser[target.type](target.params, function(res) {
-    var data = target.handle(res)
-    document.title = data.title
-    document.write(Pagist.generate(data))
-  })
-
-}
-
-Pagist.OLD_DEFAULT_LAYOUT = function(html) {
-  return '<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">'
-    + '<link href="/css-old.css" rel="stylesheet">'
-    + '<script src="http://code.jquery.com/jquery.min.js"><\/script>'
-    + '<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"><\/script>'
-    + '<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>'
-    + '<div class="container">'
-    +   html
-    + '</div>'
-    + '<div class="footer">'
-    +   (this.footer || '')
-    + '</div>'
 }
 
 Pagist.DEFAULT_LAYOUT = function(html) {
@@ -215,8 +169,4 @@ Pagist.filetypes['.md'] = Pagist.filetypes['.txt'] = function markdown(text) {
   return math.insert(marked(text))
 }
 
-if (typeof module != 'undefined' && module.exports) {
-  module.exports = Pagist
-}
-  
-})()
+module.exports = Pagist
