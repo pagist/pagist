@@ -91,7 +91,7 @@ Pagist.route = function(path) {
     }
   })
 
-  on(/^drive\/(\w{20,})\/([^?]+)$/, function(m) {
+  on(/^drive:(\w{20,})\/([^?]+)$/, function(m) {
     var footer = _.template(
           '<a href="<%- url %>"><%- left %><b><%- right %></b></a> on <a href="http://googledrive.com">Google Drive</a>'
         )
@@ -146,7 +146,7 @@ Pagist.route = function(path) {
     }
   }
 
-  on(/^board\.net\/(\w+)$/, etherpad('board.net', 'http://board.net'))
+  on(/^board:(\w+)$/, etherpad('board.net', 'http://board.net'))
   
 
   return result
