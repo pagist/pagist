@@ -154,6 +154,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
       }
 
       $scope.stat.maxTime = _.max(_.filter(_.pluck(messages, 'time'), _.isNumber))
+      $scope.stat.lastMessage = _.last(messages)
       
       if ($scope.stat.updateRead) {
         var message = $scope.messages[$scope.stat.updateRead]
@@ -368,7 +369,9 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
 .controller('LoginController', function($scope) {
   $scope.login = function(name) {
     if (name) {
-      $scope.users[name] = { name: name, read: null, typing: false }
+      if (!$scope.users[name]) {
+        $scope.users[name] = { name: name, read: null, typing: false }
+      }
       $scope.session.user = name
     }
   }
@@ -379,7 +382,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
   pool.fetch = function(id, html) {
     var item = cache[id] || (cache[id] = { })
     if (item.html != html) {
-      var template = '<span class="message"></span>'
+      var template = '<span class="message-body"></span>'
       item.element = angular.element(template).html(html)
       item.html = html
       MathJax.Hub.Queue(["Typeset", MathJax.Hub, item.element[0]])
@@ -394,7 +397,8 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
     link: function(scope, element, attrs) {
       scope.$watch(
         function(scope) {
-          return renderer.html(attrs.messageId)
+          return renderer.html(attrs.messageId) +
+            getTyping(scope.messages[attrs.messageId], scope)
         },
         function(value) {
           element.html('').append(pool.fetch(attrs.messageId, value)).append(' ')
@@ -414,6 +418,17 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
         })
       })
     }
+  }
+
+  function getTyping(message, scope) {
+    var lastMessage = scope.stat.lastMessage
+    if (lastMessage && message.id == lastMessage.id) {
+      var user = scope.users[lastMessage.user]
+      if (user && user.typing) {
+        return ' ...<span class="glyphicon-pencil glyphicon"></span>'
+      }
+    }
+    return ''
   }
 
   function getClass(message, scope) {
