@@ -224,7 +224,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
         var c = m3;
         c = c.replace(/^([ \t]*)/g,"")  // leading whitespace
         c = c.replace(/[ \t]*$/g,"")    // trailing whitespace
-        c = c.replace(/\*_\{\}\[\]\\/g,special)
+        c = c.replace(/[\*_\{\}\[\]\\]/g,special)
         return m1+"<code>"+c+"</code>"
       }
     )
