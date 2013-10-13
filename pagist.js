@@ -148,6 +148,24 @@ Pagist.route = function(path) {
 
   on(/^board:(\w+)$/, etherpad('board.net', 'http://board.net'))
   
+  on(/^local:\/(.*)$/, function(m) {
+    var path = decodeURIComponent(m[1])
+    return {
+      type:   'local',
+      params: {
+        path: path
+      },
+      handle: function(data) {
+        return  {
+          title:  path,
+          files:  [
+            { filename: 'content.md', content: data }
+          ],
+          footer: 'Local file ' + path
+        }
+      }
+    }
+  })
 
   return result
 

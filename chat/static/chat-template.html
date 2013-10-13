@@ -1,0 +1,63 @@
+
+<div ng-if="!!self()">
+  <div class="user-list">
+    <ul>
+      <li class="user" ng-repeat="user in users">
+        {{user.name}}
+        <span class="glyphicon-ok glyphicon fade-animation indicator"
+          ng-show="user.read >= stat.maxTime"></span
+        ><span class="glyphicon-pencil glyphicon fade-animation indicator"
+          ng-show="user.typing"></span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div ng-if="!!self()" ng-controller="ChatController">
+  <h1>Welcome, {{me()}}</h1>
+  <div class="chat-log">
+    <div class="row message" ng-repeat="item in display track by item.id">
+      <div class="col-sm-2 owner">{{item.user}}</div>
+      <div class="col-sm-10 display-content" compile="render(item)"></div>
+    </div>
+  </div>
+  <div class="form">
+    <div class="row">
+      <div class="col-sm-2 owner">
+        {{me()}}
+      </div>
+      <div class="col-sm-10">
+        <textarea class="form-control input-text"
+          placeholder="Enter text and press enter. Press enter to acknowledge."
+          ng-keydown="keydown($event)"
+          ng-model="text"
+          ng-trim="false"></textarea>
+        <div class="text-right edit-toolbars" ng-if="editing()">
+          <input type="button" class="btn btn-danger demolish-button" value="Demolish"
+            ng-click="demolish()">
+          <input type="button" class="btn btn-default relinquish-button" value="Relinquish"
+            ng-click="relinquish()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div ng-if="!self()" ng-controller="LoginController">
+  <h1>Login Plox</h1>
+  <form class="form-horizontal" ng-submit="login(loginName)">
+    <div class="form-group">
+      <label class="control-label col-xs-3" for="login-name">Your Name</label>
+      <div class="col-xs-9">
+        <input id="login-name" class="form-control login-name" ng-model="loginName">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <input type="submit" class="login-button btn btn-lg btn-primary" value="Login!">
+      </div>
+    </div>
+  </div>
+</div>
+

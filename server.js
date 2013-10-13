@@ -5,6 +5,7 @@ var Pagist = require('./pagist')
 var request = require('request')
 var _ = require('lodash')
 var when = require('when')
+var fs = require('fs')
 
 var template = _.template(
       '<!DOCTYPE html><meta charset=utf-8><title><%- title %></title>' +
@@ -19,6 +20,8 @@ function makeRequest(url) {
   })
 }
 
+var base = process.argv[2]
+
 Pagist.server = {
   gist: function(params, callback) {
     var url = 'https://api.github.com/gists/' + params.id
@@ -32,6 +35,15 @@ Pagist.server = {
   etherpadlite: function(params, callback) {
     var url = params.base + '/p/' + params.name + '/export/txt'
     return makeRequest(url)
+  },
+  local: function(params, callback) {
+    return when.promise(function(resolve, reject) {
+      if (!base) throw new Error('hello!')
+      fs.readFile(base + '/' + params.path, 'utf-8', function(err, data) {
+        if (err) return reject(err)
+        resolve(data)
+      })
+    })
   }
 }
 
@@ -58,5 +70,7 @@ app.use(function(req, res, next) {
     })
 
 })
+
+require('./chat').listen(app)
 
 app.listen(process.env.PORT)

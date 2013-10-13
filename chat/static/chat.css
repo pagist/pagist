@@ -1,0 +1,105 @@
+
+body {
+  font-size: 20px;
+}
+
+input.login-name.form-control {
+  font-size: 20px;
+  height: 40px;
+}
+
+.user-list {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  width: 12em;
+  border: 1px solid #ccc;
+  padding: 8px;
+  background: #fff;
+  z-index: 1;
+}
+.user-list ul {
+  margin: 0;
+  padding-left: 1.6em;
+}
+
+.owner {
+  font-weight: bold;
+}
+.display-content {
+  padding-left: 2em;
+}
+@media (min-width: 768px) {
+  .owner {
+    text-align: right;
+  }
+  .display-content p {
+    padding-left: 0;
+  }
+}
+
+.mine {
+  cursor: pointer;
+}
+
+.mine:hover,
+.mine:hover .MathJax_Display {
+  box-shadow: 0 0px 10px #4e9;
+}
+
+.editing {
+  opacity: 0.5;
+}
+
+.unread {
+  background: #ff7;
+}
+
+.edit-toolbars {
+  margin-top: 8px;
+}
+
+.form {
+  padding-bottom: 256px;
+}
+
+.indicator {
+  display: inline-block;
+  width: 24px;
+  text-align: center;
+}
+.indicator.ng-hide-add,
+.indicator.ng-hide-remove {
+  display: inline-block !important;
+}
+.fade-animation.ng-hide-add,
+.fade-animation.ng-hide-remove {
+  -webkit-transition: 1s opacity, 1s margin-right;
+  -moz-transition: 1s opacity, 1s margin-right;
+  transition: 1s opacity, 1s margin-right;
+}
+.fade-animation.ng-hide-remove {
+  opacity: 0;
+}
+.fade-animation.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1;
+}
+.fade-animation.ng-hide-add {
+  opacity: 1;
+}
+.fade-animation.ng-hide-add.ng-hide-add-active {
+  opacity: 0;
+}
+
+.indicator.ng-hide-remove {
+  margin-right: -24px;
+}
+.indicator.ng-hide-remove.ng-hide-remove-active {
+  margin-right: 0;
+}
+.indicator.ng-hide-add {
+  margin-right: 0;
+}
+.indicator.ng-hide-add.ng-hide-add-active {
+  margin-right: -24px;
+}
