@@ -425,7 +425,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
     if (lastMessage && message.id == lastMessage.id) {
       var user = scope.users[lastMessage.user]
       if (user && user.typing) {
-        return ' ...<span class="glyphicon-pencil glyphicon"></span>'
+        return ' ...<span class="glyphicon-pencil glyphicon typing-indicator-icon"></span>'
       }
     }
     return ''

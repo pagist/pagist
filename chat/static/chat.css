@@ -104,3 +104,7 @@ input.login-name.form-control {
 .indicator.ng-hide-add.ng-hide-add-active {
   margin-right: -24px;
 }
+.typing-indicator-icon {
+  position: relative;
+  top: -1px; left: 1px;
+}
