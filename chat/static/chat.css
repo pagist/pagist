@@ -33,7 +33,7 @@ input.login-name.form-control {
   .owner {
     text-align: right;
   }
-  .display-content p {
+  .display-content {
     padding-left: 0;
   }
 }
@@ -51,8 +51,9 @@ input.login-name.form-control {
   opacity: 0.5;
 }
 
-.unread {
-  background: #ff7;
+.unread,
+.unread .MathJax_Display {
+  background: #ff9;
 }
 
 .edit-toolbars {
