@@ -186,8 +186,7 @@ Pagist.generate = function(data) {
 }
 
 Pagist.DEFAULT_LAYOUT = function(html) {
-  return '<link href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css" rel="stylesheet">'
-    + '<link href="/css.css" rel="stylesheet">'
+  return '<link href="/css.css" rel="stylesheet">'
     + '<script src="http://code.jquery.com/jquery.min.js"><\/script>'
     + '<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"><\/script>'
     + '<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>'
