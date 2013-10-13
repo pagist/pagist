@@ -370,7 +370,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
   $scope.login = function(name) {
     if (name) {
       if (!$scope.users[name]) {
-        $scope.users[name] = { name: name, read: null, typing: false }
+        $scope.users[name] = { name: name, read: 0, typing: false }
       }
       $scope.session.user = name
     }
