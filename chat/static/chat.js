@@ -159,8 +159,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
         var message = $scope.messages[$scope.stat.updateRead]
         var self = $scope.self()
         if (message && self) {
-          delete $scope.stat.updateRead
-          self.read = message.time
+          self.read = Math.max(message.time, self.read)
         }
       }
 
