@@ -397,11 +397,12 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
     link: function(scope, element, attrs) {
       scope.$watch(
         function(scope) {
-          return renderer.html(attrs.messageId) +
-            getTyping(scope.messages[attrs.messageId], scope)
+          return renderer.html(attrs.messageId)// +
+            //getTyping(scope.messages[attrs.messageId], scope)
         },
         function(value) {
-          element.html('').append(pool.fetch(attrs.messageId, value)).append(' ')
+          element.contents().remove()
+          element.append(pool.fetch(attrs.messageId, value))
         }
       )
       scope.$watch(
