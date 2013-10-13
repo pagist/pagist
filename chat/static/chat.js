@@ -3,11 +3,24 @@
 /*global angular, Firebase, _, MathJax*/
 angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
 .factory('refs', function(chatConfig) {
-  var room = new Firebase('https://dtinth-chat.firebaseio.com/room')
-               .child(chatConfig.room)
+  var base = 'https://dtinth-chat.firebaseio.com/'
+  var room = new Firebase(base + 'room/' + chatConfig.room)
   var users = room.child('users')
   var messages = room.child('messages')
-  return { users: users, messages: messages }
+  return { base: base, room: room, users: users, messages: messages }
+})
+.factory('connectionStatus', function(refs, $rootScope) {
+  var connectedRef = new Firebase(refs.base + '.info/connected')
+  var connectionStatus = { connected: false, initializing: true }
+  connectedRef.on('value', function(snapshot) {
+    setTimeout(function() {
+      $rootScope.$apply(function() {
+        connectionStatus.connected = snapshot.val()
+        if (snapshot.val()) connectionStatus.initializing = false
+      })
+    }, 0)
+  })
+  return connectionStatus
 })
 .factory('syncSession', function() {
   return function(storageKey, $scope, key) {
@@ -18,12 +31,14 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
     }, true)
   }
 })
-.controller('MainController', function($scope, angularFire, refs, syncSession) {
+.controller('MainController', function($scope, angularFire, refs, syncSession, connectionStatus) {
 
   $scope.users    = { }
   $scope.messages = { }
   $scope.session  = { }
   $scope.stat     = { }
+  $scope.initializing = function() { return connectionStatus.initializing }
+  $scope.connected    = function() { return connectionStatus.connected }
   
   angularFire(refs.users,    $scope, 'users')
   angularFire(refs.messages, $scope, 'messages')
@@ -213,9 +228,19 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
   // See license.txt for more information.
   //
   function mdf(html) {
+    html = math(html)
     html = code(html)
     html = emstrong(html)
     return html
+  }
+
+  function math(html) {
+    return html.replace(
+      /\\\([\s\S]+?\\\)|\$\$[\s\S]+?\$\$/g,
+      function(wholeMatch) {
+        return esc(wholeMatch)
+      }
+    )
   }
 
   function code(html) {
@@ -225,7 +250,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
         var c = m3;
         c = c.replace(/^([ \t]*)/g,"")  // leading whitespace
         c = c.replace(/[ \t]*$/g,"")    // trailing whitespace
-        c = c.replace(/[\*_\{\}\[\]\\]/g,special)
+        c = esc(c)
         return m1+"<code>"+c+"</code>"
       }
     )
@@ -234,9 +259,13 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
   function emstrong(html) {
     html = html.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,
 		"<strong>$2</strong>")
-    html = html.replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g,
+    html = html.replace(/\b(\*|_)(?=\S)([^\r]*?\S)\1\b/g,
             "<em>$2</em>")
     return html
+  }
+
+  function esc(c) {
+    return c.replace(/[\*_\{\}\[\]\\]/g,special)
   }
 
   function special(a) {
@@ -394,15 +423,17 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
 .directive('messageId', function(renderer, pool) {
 
   return {
+    scope: true,
     link: function(scope, element, attrs) {
       scope.$watch(
         function(scope) {
-          return renderer.html(attrs.messageId)// +
-            //getTyping(scope.messages[attrs.messageId], scope)
+          return renderer.html(attrs.messageId) +
+            getTyping(scope.messages[attrs.messageId], scope)
         },
         function(value) {
-          element.contents().remove()
-          element.append(pool.fetch(attrs.messageId, value))
+          element.html('')
+          var fetchedElement = pool.fetch(attrs.messageId, value)
+          element.append(fetchedElement)
         }
       )
       scope.$watch(

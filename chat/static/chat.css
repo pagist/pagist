@@ -13,9 +13,6 @@ input.login-name.form-control {
   top: 8px;
   right: 8px;
   width: 12em;
-  border: 1px solid #ccc;
-  padding: 8px;
-  background: #fff;
   z-index: 1;
 }
 .user-list ul {
@@ -75,9 +72,9 @@ input.login-name.form-control {
 }
 .fade-animation.ng-hide-add,
 .fade-animation.ng-hide-remove {
-  -webkit-transition: 1s opacity, 1s margin-right;
-  -moz-transition: 1s opacity, 1s margin-right;
-  transition: 1s opacity, 1s margin-right;
+  -webkit-transition: 0.3s opacity, 0.3s margin-right;
+  -moz-transition: 0.3s opacity, 0.3s margin-right;
+  transition: 0.3s opacity, 0.3s margin-right;
 }
 .fade-animation.ng-hide-remove {
   opacity: 0;

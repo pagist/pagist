@@ -1,15 +1,31 @@
 
+<div ng-if="!!initializing()">
+  <h1>Connecting to Firebase...</h1>
+  <p>Please wait!</p>
+</div>
+
+<div ng-if="!initializing()">
+
 <div ng-if="!!self()">
   <div class="user-list">
-    <ul>
-      <li class="user" ng-repeat="user in users">
-        {{user.name}}
-        <span class="glyphicon-ok glyphicon fade-animation indicator"
-          ng-show="user.read >= stat.maxTime"></span
-        ><span class="glyphicon-pencil glyphicon fade-animation indicator"
-          ng-show="user.typing"></span>
-      </li>
-    </ul>
+    <div ng-class="{
+      'panel': true,
+      'panel-default': connected(),
+      'panel-danger': !connected()
+    }">
+      <div class="panel-heading">Online Users</div>
+      <div class="panel-body">
+        <ul>
+          <li class="user" ng-repeat="user in users">
+            {{user.name}}
+            <span class="glyphicon-ok glyphicon fade-animation indicator"
+              ng-show="user.read >= stat.maxTime"></span
+            ><span class="glyphicon-pencil glyphicon fade-animation indicator"
+              ng-show="user.typing"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -42,7 +58,6 @@
     </div>
   </div>
 
-
 </div>
 
 <div ng-if="!self()" ng-controller="LoginController">
@@ -62,3 +77,4 @@
   </div>
 </div>
 
+</div>
