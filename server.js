@@ -64,10 +64,21 @@ app.use(function(req, res, next) {
   }
 })
 
-app.use(function(req, res, next) {
+function resolvePath(req) {
 
   var path = req.path.replace(/^\/?/, '')
-  if (path === '') path = '4287148'
+  var m = req.host.match(/^(\w+)\/pagist\.info$/)
+
+  if (m) path = m[1] + ':' + path
+  if (path === '') return '4287148'
+
+  return path
+
+}
+
+app.use(function(req, res, next) {
+
+  var path = resolvePath(req)
 
   var target = Pagist.route(path)
   if (!target) return next()
