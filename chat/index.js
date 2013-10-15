@@ -10,6 +10,17 @@ exports.listen = function(app) {
 
   app.use(express.static(__dirname + '/static'))
 
+  app.get('/:room', function(req, res, next) {
+
+    if (req.host == 'chat.pagist.info') {
+      var room = req.param('room')
+      res.send(chatTemplate({ room: room }))
+    } else {
+      next()
+    }
+
+  })
+
   app.get('/chat/:room', function(req, res, next) {
 
     var room = req.param('room')

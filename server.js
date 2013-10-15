@@ -50,6 +50,21 @@ Pagist.server = {
 app.use(express.static(__dirname + '/static'))
 
 app.use(function(req, res, next) {
+  if (req.host == 'www.pagist.info' || req.host == 'pagist.info') {
+    var m = req.path.match(/^\/?(\w+):/)
+    if (m) {
+      var rest = req.path.substr(m[0].length)
+      res.redirect('http://' + m[1] + '.pagist.info/' + rest)
+      return
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
+
+app.use(function(req, res, next) {
 
   var path = req.path.replace(/^\/?/, '')
   if (path === '') path = '4287148'
