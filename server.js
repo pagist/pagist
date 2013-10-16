@@ -69,7 +69,7 @@ function resolvePath(req) {
   var path = req.path.replace(/^\/?/, '')
   var m = req.host.match(/^(\w+)\.pagist\.info$/)
 
-  if (m) path = m[1] + ':' + path
+  if (m && m[1] != 'www') path = m[1] + ':' + path
   if (path === '') return '4287148'
 
   return path
