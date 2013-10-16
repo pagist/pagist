@@ -185,7 +185,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
   })()
 
   $scope.render = function(item) {
-    return renderer.render(item)
+    return renderer.render(item, $scope.stat)
   }
 
   $scope.edit = function(id) {
@@ -290,7 +290,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
     return maybe(htmlToRender[id], '...')
   }
 
-  renderer.render = function(item) {
+  renderer.render = function(item, stat) {
 
     var blocks = [ ]
     var currentBlock = null
@@ -314,6 +314,11 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
       }
 
       currentBlock.push(span)
+
+      if (message == stat.lastMessage) {
+        currentBlock.push('<span typing-user="' + _.escape(message.user) + '"></span>')
+      }
+
       htmlToRender[message.id] = currentBlock.format(text)
 
     })
@@ -420,6 +425,24 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
   }
   return pool
 })
+.directive('typingUser', function() {
+
+  return {
+    scope: true,
+    link: function(scope, element, attrs) {
+      var username = attrs.typingUser
+      element.addClass('typing-indicator')
+      element.html(' ...<span class="glyphicon-pencil glyphicon typing-indicator-icon"></span>')
+      scope.$watch(function() {
+        var user = scope.users[username]
+        return (user && user.typing)
+      }, function(value) {
+        element.css('display', value ? '' : 'none')
+      })
+    }
+  }
+
+})
 .directive('messageId', function(renderer, pool) {
 
   return {
@@ -427,8 +450,7 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
     link: function(scope, element, attrs) {
       scope.$watch(
         function(scope) {
-          return renderer.html(attrs.messageId) +
-            getTyping(scope.messages[attrs.messageId], scope)
+          return renderer.html(attrs.messageId)
         },
         function(value) {
           element.html('')
@@ -450,17 +472,6 @@ angular.module('chat', ['firebase', 'chatConfig', 'ngAnimate'])
         })
       })
     }
-  }
-
-  function getTyping(message, scope) {
-    var lastMessage = scope.stat.lastMessage
-    if (lastMessage && message.id == lastMessage.id) {
-      var user = scope.users[lastMessage.user]
-      if (user && user.typing) {
-        return ' ...<span class="glyphicon-pencil glyphicon typing-indicator-icon"></span>'
-      }
-    }
-    return ''
   }
 
   function getClass(message, scope) {
