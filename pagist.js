@@ -1,6 +1,8 @@
 
 var marked = require('marked')
 var _      = require('lodash')
+var fs     = require('fs')
+var layout = _.template(fs.readFileSync(__dirname + '/layout.html', 'utf-8'))
 
 var Pagist = {
   filetypes: {}
@@ -186,18 +188,9 @@ Pagist.generate = function(data) {
 }
 
 Pagist.DEFAULT_LAYOUT = function(html) {
-  return '<link href="/css.css" rel="stylesheet">'
-    + '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
-    + '<script src="http://code.jquery.com/jquery.min.js"><\/script>'
-    + '<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"><\/script>'
-    + '<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>'
-    + '<div class="container">'
-    +   html
-    + '</div>'
-    + '<div class="footer">'
-    +   (this.footer || '')
-    +   '<div>Powered by <a href="http://www.pagist.info/"><b>Pagist</b></a></div>'
-    + '</div>'
+  var locals = Object.create(this)
+  locals.html = html
+  return layout(locals)
 }
 
 Pagist.filetypes['.html'] = function(text) {
