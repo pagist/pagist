@@ -70,6 +70,7 @@ function resolvePath(req) {
   var m = req.host.match(/^(\w+)\.pagist\.info$/)
 
   if (m && m[1] != 'www') path = m[1] + ':' + path
+  if (path === 'chat:') return '6961429'
   if (path === '') return '4287148'
 
   return path

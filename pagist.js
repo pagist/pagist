@@ -196,7 +196,7 @@ Pagist.DEFAULT_LAYOUT = function(html) {
     + '</div>'
     + '<div class="footer">'
     +   (this.footer || '')
-    +   '<div>Powered by <a href="/"><b>Pagist</b></a></div>'
+    +   '<div>Powered by <a href="http://www.pagist.info/"><b>Pagist</b></a></div>'
     + '</div>'
 }
 
