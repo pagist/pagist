@@ -1,6 +1,8 @@
 
-body {
-  font-size: 20px;
+@media (min-width: 720px) {
+  body {
+    font-size: 20px;
+  }
 }
 
 input.login-name.form-control {
