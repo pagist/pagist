@@ -72,7 +72,7 @@ Pagist.route = function(path) {
     if (m) result = f(m)
   }
 
-  on(/^(\d+)$/, function(m) {
+  on(/^([0-9a-f]+)$/, function(m) {
     var footer = _.template(
           '<b>gist <a href="<%= html_url %>">#<%= id %></a></b>'
         + ' by <a href="https://github.com/<%= user.login %>"><%= user.login %></a>'
