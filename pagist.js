@@ -1,5 +1,5 @@
 
-var marked = require('marked')
+var marked = require('./pagist_marked')
 var _      = require('lodash')
 var fs     = require('fs')
 var layout = _.template(fs.readFileSync(__dirname + '/layout.html', 'utf-8'))
