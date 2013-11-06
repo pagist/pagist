@@ -28,13 +28,8 @@ Pagist.server = {
         + '?access_token=' + process.env.GITHUB_TOKEN
     return makeRequest(url).then(JSON.parse)
   },
-  googledrive: function(params, callback) {
-    var url = 'http://googledrive.com/host/' + params.path
-    return makeRequest(url)
-  },
-  etherpadlite: function(params, callback) {
-    var url = params.base + '/p/' + params.name + '/export/txt'
-    return makeRequest(url)
+  raw: function(params, callback) {
+    return makeRequest(params.url)
   },
   local: function(params, callback) {
     return when.promise(function(resolve, reject) {

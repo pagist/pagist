@@ -72,6 +72,42 @@ Pagist.route = function(path) {
     if (m) result = f(m)
   }
 
+  function preprocessTemplate(str) {
+    return str.replace(/\$(\d+)/g, '<%= matches[$1] %>')
+      .replace(/\$B/g, '<%= basename %>')
+  }
+
+  function template(str) {
+    return _.template(preprocessTemplate(str))
+  }
+
+  function raw(options) {
+    var footer   = template(options.footer)
+    var url      = template(options.url)
+    var filename = template(options.filename)
+    var title    = template(options.title || '$B')
+    return function(matches) {
+      var locals = { matches: matches }
+      var basename = Pagist.basename(filename(locals))
+      locals.basename = basename
+      return {
+        type: 'raw',
+        params: {
+          url: url(locals)
+        },
+        handle: function(data) {
+          return {
+            title: title(locals),
+            files: [
+              { filename: basename, content: data }
+            ],
+            footer: footer(locals)
+          }
+        }
+      }
+    }
+  }
+
   on(/^([0-9a-f]+)$/, function(m) {
     var footer = _.template(
           '<b>gist <a href="<%= html_url %>">#<%= id %></a></b>'
@@ -93,59 +129,32 @@ Pagist.route = function(path) {
     }
   })
 
-  on(/^drive:(\w{20,})\/([^?]+)$/, function(m) {
-    var footer = _.template(
-          '<a href="<%- url %>"><%- left %><b><%- right %></b></a> on <a href="http://googledrive.com">Google Drive</a>'
-        )
-    return {
-      type:   'googledrive',
-      params: {
-        path: m[1] + '/' + m[2]
-      },
-      handle: function(data) {
-        var basename = Pagist.basename(m[2])
-        return {
-          title:    basename,
-          files:    [
-            { filename: basename, content: data }
-          ],
-          footer:   footer({
-            url: 'http://googledrive.com/host/' + m[1] + '/' + m[2],
-            path: m[1] + '/' + m[2],
-            left: Pagist.beforeBasename(m[1] + '/' + m[2]),
-            right: basename
-          })
-        }
-      }
-    }
-  })
+  on(/^drive:(\w{20,})\/([^?]+)$/, raw({
+    url:          'http://googledrive.com/host/$1/$2',
+    filename:     '$2',
+    footer:       '<a href="http://googledrive.com/host/$1/$2">$1/<b>$2</b></a> on <a href="http://googledrive.com">Google Drive</a>'
+  }))
+
+  on(/^wiki:(\w+)\/([^\/]+)\/(.+)$/, raw({
+    url:      'https://raw.github.com/wiki/$1/$2/$3.md',
+    filename: '$3.md',
+    title:    '$3 : $1/$2 Wiki',
+    footer:   '<a href="https://github.com/$1/$2/wiki/$3">$1/<b>$2</b></a> on <a href="https://github.com/$1/$2/wiki">GitHub Wiki</a>'
+  }))
+
+  on(/^(\w+)\/([^\/]+)\/(.+)$/, raw({
+    url:      'https://raw.github.com/$1/$2/master/$3',
+    filename: '$3',
+    title:    '$B : $1/$2',
+    footer:   '<a href="https://github.com/$1/$2/blob/master/$3"><b>$3</b></a> on <a href="https://github.com/$1/$2">GitHub: $1/$2</a>'
+  }))
 
   function etherpad(providerName, baseUrl) {
-    return function(m) {
-      var name = m[1]
-      var footer = _.template(
-            '<a href="<%- url %>"><b><%- name %></b></a> on <a href="http://board.net">board.net</a>'
-          )
-      return {
-        type:   'etherpadlite',
-        params: {
-          base: baseUrl,
-          name: m[1]
-        },
-        handle: function(data) {
-          return {
-            title:    name,
-            files:    [
-              { filename: 'content.md', content: data }
-            ],
-            footer:   footer({
-              name: name,
-              url:  baseUrl + '/p/' + name
-            })
-          }
-        }
-      }
-    }
+    return raw({
+      url:       baseUrl + '/p/$1/export/txt',
+      filename:  '$1.md',
+      footer:    '<a href="' + baseUrl + '/p/$1"><b>$1</b></a> on <a href="' + baseUrl + '">' + providerName + '</a>'
+    })
   }
 
   on(/^board:(\w+)$/, etherpad('board.net', 'http://board.net'))
