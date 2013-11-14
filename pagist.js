@@ -142,7 +142,7 @@ Pagist.route = function(path) {
     footer:   '<a href="https://github.com/$1/$2/wiki/$3">$1/<b>$2</b></a> on <a href="https://github.com/$1/$2/wiki">GitHub Wiki</a>'
   }))
 
-  on(/^(\w+)\/([^\/]+):([^\]]+)\/(.+)$/, raw({
+  on(/^(\w+)\/([^\/]+):([^\/]+)\/(.+)$/, raw({
     url:      'https://raw.github.com/$1/$2/$3/$4',
     filename: '$4',
     title:    '$B : $1/$2 [$3]',
