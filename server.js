@@ -13,7 +13,7 @@ var template = _.template(
 
 function makeRequest(url) {
   return when.promise(function(resolve, reject) {
-    request(url, function(err, res, body) {
+    request(url, { headers: { 'User-Agent': 'Pagist' } }, function(err, res, body) {
       if (err) reject(err)
       resolve(body)
     })
