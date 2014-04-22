@@ -120,6 +120,8 @@ Pagist.route = function(path) {
         id:   m[1],
       },
       handle: function(data) {
+        if (data.user == null) data.user = data.owner
+        if (data.user == null) data.user = { login: '#unknown' }
         return {
           title:    data.description,
           files:    data.files,
