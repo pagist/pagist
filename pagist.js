@@ -223,6 +223,15 @@ Pagist.filetypes['.js'] = function(text) {
   return '<script>' + text + '</script>'
 }
 
+Pagist.filetypes['.png'] =
+Pagist.filetypes['.gif'] =
+Pagist.filetypes['.jpg'] =
+Pagist.filetypes['.jpeg'] =
+Pagist.filetypes['.bmp'] =
+function(text) {
+  return ''
+}
+
 Pagist.filetypes['.md'] = Pagist.filetypes['.txt'] = function markdown(text) {
   var math = new Pagist.MathExtractor()
   text = math.extract(text)
